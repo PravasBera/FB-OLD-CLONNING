@@ -1,4 +1,4 @@
-here#!/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import random
@@ -64,14 +64,9 @@ def simulate_login(uids):
 
     return ok_results
 
-# ---------------- Stylish OK Print -----------------
-def print_ok(uid, pwd):
-    box_line = Fore.GREEN + "╔" + "═"*38 + "╗"
-    middle   = Fore.GREEN + f"║ UID: {uid} | PASS: {pwd}".ljust(39) + "║"
-    box_end  = Fore.GREEN + "╚" + "═"*38 + "╝"
-    print(box_line)
-    print(middle)
-    print(box_end + Style.RESET_ALL)
+# ---------------- OK Print (Simple with Serial) -----------------
+def print_ok(uid, pwd, index):
+    print(Fore.GREEN + f"#{index} UID: {uid} | PASS: {pwd}" + Style.RESET_ALL)
 
 # ---------------- Main -----------------
 def main():
@@ -95,8 +90,8 @@ def main():
 
     ok_count = 0
     with open("ok.txt", "w") as f:
-        for uid, pwd in results:
-            print_ok(uid, pwd)   # ✅ Stylish বক্স আউটপুট
+        for idx, (uid, pwd) in enumerate(results, start=1):
+            print_ok(uid, pwd, idx)   # ✅ এক লাইনে Serial + UID + PASS
             f.write(f"{uid} | {pwd}\n")
             ok_count += 1
 
