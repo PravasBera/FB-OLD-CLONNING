@@ -30,7 +30,7 @@ def banner():
 
     for dot in "Loading Tool...":
         print(Fore.CYAN + dot, end="", flush=True)
-        time.sleep(0.05)
+        time.sleep(0.03)
     print("\n")
 
 # ---------------- UID Generator -----------------
@@ -70,14 +70,31 @@ def print_ok(uid, pwd, index):
 
 # ---------------- Main -----------------
 def main():
+    clear_screen()
     banner()
 
+    # ✅ Year selection with serial
     years = list(range(2009, 2017))
-    print(Fore.CYAN + "Available Years:" + Fore.GREEN, " ".join(map(str, years)))
-    year = int(input(Fore.YELLOW + "Choose year (2009–2016): "))
-    total = int(input(Fore.YELLOW + "How many UIDs to generate? (5000–100000): "))
+    print(Fore.CYAN + "Available Years:")
+    for i, y in enumerate(years, start=1):
+        print(Fore.YELLOW + f" {i}. " + Fore.GREEN + str(y))
 
-    # ✅ Clear menu
+    try:
+        choice = int(input(Fore.CYAN + "\nChoose Year (1–8): "))
+        year = years[choice - 1]
+    except (ValueError, IndexError):
+        print(Fore.RED + "\n❌ Invalid Choice! Exiting..." + Style.RESET_ALL)
+        return
+
+    try:
+        total = int(input(Fore.CYAN + "How many UIDs to generate? (5000–100000): "))
+        if total < 5000 or total > 100000:
+            raise ValueError
+    except ValueError:
+        print(Fore.RED + "\n❌ Invalid number! Exiting..." + Style.RESET_ALL)
+        return
+
+    # ✅ Clear screen before starting main process
     clear_screen()
     banner()
 
