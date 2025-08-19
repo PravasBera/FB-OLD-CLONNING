@@ -1,0 +1,108 @@
+here#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import random
+import time
+import os
+from colorama import Fore, Style, init as colorama_init
+import pyfiglet
+from tqdm import tqdm   # progress bar
+
+colorama_init(autoreset=True)
+
+# ---------------- Clear Function -----------------
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
+
+# ---------------- Banner -----------------
+def banner():
+    ascii_banner = pyfiglet.figlet_format("BULLET TEAM")
+    print(Fore.LIGHTGREEN_EX + ascii_banner + Style.RESET_ALL)
+
+    print(Fore.YELLOW + "Author   :" + Fore.CYAN + " PRAVAS BERA")
+    print(Fore.YELLOW + "Version  :" + Fore.CYAN + " 1.0")
+    print(Fore.YELLOW + "Country  :" + Fore.CYAN + " INDIA")
+    print(Fore.YELLOW + "Team     :" + Fore.RED + " Indian Danger Of Bullet Team")
+    print(Fore.MAGENTA + "-" * 60 + Style.RESET_ALL)
+
+    print(Fore.LIGHTWHITE_EX + "🔥 " + Fore.LIGHTMAGENTA_EX + "Facebook OLD Clonning Tool" + Fore.LIGHTWHITE_EX + " 🔥")
+    print(Fore.MAGENTA + "-" * 60 + Style.RESET_ALL)
+
+    for dot in "Loading Tool...":
+        print(Fore.CYAN + dot, end="", flush=True)
+        time.sleep(0.05)
+    print("\n")
+
+# ---------------- UID Generator -----------------
+def generate_uids(year, count):
+    base = {
+        2009: "100000",
+        2010: "100001",
+        2011: "100002",
+        2012: "100003",
+        2013: "100004",
+        2014: "100005",
+        2015: "100006",
+        2016: "100007",
+    }
+    prefix = base.get(year, "100000")
+    uids = []
+    for _ in range(count):
+        suffix = "".join(random.choices("0123456789", k=8))
+        uids.append(prefix + suffix)
+    return uids
+
+# ---------------- Login Simulation -----------------
+def simulate_login(uids):
+    passwords = ["123456", "1234567", "12345678", "123456789", "1234567890"]
+    ok_results = []
+
+    for uid in tqdm(uids, desc="Checking", ncols=70, colour="green"):  # progress bar
+        pwd = random.choice(passwords)
+        ok_results.append((uid, pwd))   # শুধু OK দেখাবে
+        time.sleep(0.0005)
+
+    return ok_results
+
+# ---------------- Stylish OK Print -----------------
+def print_ok(uid, pwd):
+    box_line = Fore.GREEN + "╔" + "═"*38 + "╗"
+    middle   = Fore.GREEN + f"║ UID: {uid} | PASS: {pwd}".ljust(39) + "║"
+    box_end  = Fore.GREEN + "╚" + "═"*38 + "╝"
+    print(box_line)
+    print(middle)
+    print(box_end + Style.RESET_ALL)
+
+# ---------------- Main -----------------
+def main():
+    banner()
+
+    years = list(range(2009, 2017))
+    print(Fore.CYAN + "Available Years:" + Fore.GREEN, " ".join(map(str, years)))
+    year = int(input(Fore.YELLOW + "Choose year (2009–2016): "))
+    total = int(input(Fore.YELLOW + "How many UIDs to generate? (5000–100000): "))
+
+    # ✅ Clear menu
+    clear_screen()
+    banner()
+
+    print(Fore.LIGHTCYAN_EX + f"\n[•] Generating {total} UIDs for year {year} ..." + Style.RESET_ALL)
+    uids = generate_uids(year, total)
+    print(Fore.GREEN + f"[✓] Generated {len(uids)} UIDs.\n")
+
+    print(Fore.LIGHTMAGENTA_EX + "[•] Testing with common passwords (showing ONLY OK):\n" + Style.RESET_ALL)
+    results = simulate_login(uids)
+
+    ok_count = 0
+    with open("ok.txt", "w") as f:
+        for uid, pwd in results:
+            print_ok(uid, pwd)   # ✅ Stylish বক্স আউটপুট
+            f.write(f"{uid} | {pwd}\n")
+            ok_count += 1
+
+    print(Fore.MAGENTA + "\n==== DONE ====" + Style.RESET_ALL)
+    print(Fore.GREEN + f"OK results: {ok_count}")
+    print(Fore.YELLOW + "Saved to ok.txt")
+
+if __name__ == "__main__":
+    main()
